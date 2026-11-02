@@ -42,7 +42,7 @@ Framework preset: **Next.js** (repo root).
 Environment variables:
 
 - `RESEND_API_KEY` — server-only. Required for the booking form to send mail. Without it, the form falls back to email.
-- `BOOKING_TO_EMAIL` — optional. Defaults to `jasiahsteez@gmail.com`.
+- `BOOKING_TO_EMAIL` — optional. Defaults to the client's booking email (see the client row in Notion).
 - `BOOKING_FROM_EMAIL` — optional. Defaults to `onboarding@resend.dev` when unset. Production uses the verified sender.
 - `YOUTUBE_API_KEY` — server-only. Required for `/video`.
 - Optional: `YOUTUBE_PLAYLIST_ID`, `NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET`
