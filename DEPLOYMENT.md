@@ -2,7 +2,7 @@
 
 ## Stack
 
-- **Frontend**: Next.js 14 (App Router), React 18
+- **Frontend**: Next.js 16 (App Router), React 19
 - **CMS**: Sanity. The studio is embedded in the site at `/studio` (`/admin` redirects there). The `studio/` folder still runs on its own with `npm run dev`.
 - **Content API**: `@sanity/client` from Next.js server components
 - **Images**: Sanity CDN (`urlFor` / `cdn.sanity.io`), sized with `auto=format`
@@ -15,7 +15,7 @@
 ```
 jasiahpowers/
 ├── src/app/           # Next.js App Router. Site chrome is in (site)/
-├── src/app/studio/    # Embedded Sanity Studio
+├── src/app/(studio)/  # Embedded Sanity Studio
 ├── src/components/
 ├── src/lib/           # Sanity client + queries
 ├── public/
