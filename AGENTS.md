@@ -22,7 +22,7 @@ The framework repo is private. Cloud agents open it with `git clone --depth 1 ht
 
 ## Commands
 - `npm run install-all` (root + studio), `npm run dev` (:3000, Studio at /studio), `npm run build`, `npm run lint`.
-- Standalone Studio: `cd studio && npm run dev`; `npm run deploy` there publishes the hosted Studio.
+- Standalone Studio (local dev only): `cd studio && npm run dev`. The only deployed Studio is the embedded one at jasiahpowers.com/studio; there is no hosted *.sanity.studio.
 
 ## Env
 - `RESEND_API_KEY` (without it the form falls back to email), `YOUTUBE_API_KEY` (needed for /video). Optional: `BOOKING_TO_EMAIL`, `BOOKING_FROM_EMAIL`, `YOUTUBE_PLAYLIST_ID`.
