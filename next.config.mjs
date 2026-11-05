@@ -21,6 +21,7 @@ const nextConfig = {
     return [
       { source: '/home', destination: '/', permanent: true },
       { source: '/admin', destination: '/studio', permanent: false },
+      { source: '/admin/:path*', destination: '/studio/:path*', permanent: false },
     ]
   },
   compiler: {
