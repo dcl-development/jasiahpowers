@@ -15,17 +15,17 @@ The framework repo is private. Cloud agents open it with `git clone --depth 1 ht
 - Vercel (`vercel.json`: npm install, npm run build).
 
 ## Layout
-- `src/app/(site)/` pages: home, `photos/`, `prints/`, `projects/`, `video/`, `contact/`. `src/app/(studio)/` embedded Studio. `src/app/api/booking/`.
+- `src/app/(site)/` pages: home, `photos/`, `prints/`, `projects/`, `video/`, `book/`, `contact/`. `src/app/(studio)/` embedded Studio. `src/app/api/booking/`, `src/app/api/book/`.
 - `src/components/` (`projects/`, `photos/`), `src/lib/` Sanity client and queries.
 - `studio/` standalone Studio with its **own** package.json (Sanity 6). Schema: homePage, photo, project, siteSettings. `photoGallery` and `siteSettings` are singletons.
-- `scripts/migrate-handoff.mjs` one-off content migration. `DEPLOYMENT.md` has the full deploy notes.
+- `scripts/migrate-handoff.mjs` one-off content migration. `scripts/seed-book-page.mjs` seeds the Book singleton. `DEPLOYMENT.md` has the full deploy notes.
 
 ## Commands
 - `npm run install-all` (root + studio), `npm run dev` (:3000, Studio at /studio), `npm run build`, `npm run lint`.
 - Standalone Studio (local dev only): `cd studio && npm run dev`. The only deployed Studio is the embedded one at jasiahpowers.com/studio; there is no hosted *.sanity.studio.
 
 ## Env
-- `RESEND_API_KEY` (without it the form falls back to email), `YOUTUBE_API_KEY` (needed for /video). Optional: `BOOKING_TO_EMAIL`, `BOOKING_FROM_EMAIL`, `YOUTUBE_PLAYLIST_ID`.
+- `RESEND_API_KEY` (without it the form falls back to email), `YOUTUBE_API_KEY` (needed for /video). Book checkout (test mode): `STRIPE_SECRET_KEY`, `STRIPE_PRICE_ID`, `STRIPE_SHIPPING_RATE_ID`, `STRIPE_WEBHOOK_SECRET`, `SANITY_API_WRITE_TOKEN` (inventory webhook). Optional: `BOOKING_TO_EMAIL`, `BOOKING_FROM_EMAIL`, `YOUTUBE_PLAYLIST_ID`, `NEXT_PUBLIC_SITE_URL`.
 
 ## Gotchas
 - Two Sanity installs: the root app and `studio/` each have their own (both Sanity 6, React 19). `next.config.mjs` forces root `node_modules` so `/studio` doesn't pull the `studio/` copy into the app build. Don't remove that webpack override.

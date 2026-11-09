@@ -1165,6 +1165,55 @@ code {
   }
 }
 
+.book-page__price {
+  margin-top: 12px;
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.book-page__details {
+  margin-top: 22px;
+  max-width: 28rem;
+}
+
+.book-page__details p {
+  margin-top: 10px;
+}
+
+.book-description {
+  margin-top: 18px;
+  max-width: 32rem;
+}
+
+.book-photos {
+  display: grid;
+  gap: 14px;
+  margin-top: 22px;
+  max-width: 32rem;
+}
+
+.book-photos__frame {
+  display: block;
+  border: 1px solid var(--ink);
+  background-color: #fffef8;
+  background-size: cover;
+  background-position: center;
+}
+
+.book-page__stock {
+  margin-top: 18px;
+  font-size: 15px;
+}
+
+.book-checkout {
+  margin-top: 20px;
+}
+
+.book-checkout__qty {
+  max-width: 12rem;
+}
+
 .studio-root {
   height: 100vh;
   height: 100dvh;
