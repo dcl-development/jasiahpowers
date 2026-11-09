@@ -1,8 +1,32 @@
+'use client'
+
+import { useCallback, useState } from 'react'
 import MotionImage from '@/components/motion/MotionImage'
 import { imageLqip, imageMeta, imageSrc } from '@/lib/image'
 
 export default function BookMedia({ photos }) {
   const items = (photos || []).filter((item) => item?.image?.asset)
+  const [selected, setSelected] = useState(0)
+
+  const select = useCallback((index) => {
+    setSelected(index)
+  }, [])
+
+  const onKeyDown = useCallback(
+    (event) => {
+      if (items.length < 2) return
+      if (event.key === 'ArrowLeft') {
+        event.preventDefault()
+        setSelected((current) => (current - 1 + items.length) % items.length)
+      }
+      if (event.key === 'ArrowRight') {
+        event.preventDefault()
+        setSelected((current) => (current + 1) % items.length)
+      }
+    },
+    [items.length]
+  )
+
   if (!items.length) {
     return (
       <div className="book-media book-media--empty">
@@ -11,47 +35,71 @@ export default function BookMedia({ photos }) {
     )
   }
 
-  const [primary, ...rest] = items
+  const safeIndex = Math.min(selected, items.length - 1)
+  const current = items[safeIndex]
+  const meta = imageMeta(current.image)
+  const alt = String(current.alt ?? '').trim()
 
-  function renderFigure(item, index, featured) {
-    const meta = imageMeta(item.image)
-    const alt = String(item.alt ?? '').trim()
-    return (
-      <figure
-        key={item.image.asset._ref || index}
-        className={`book-media__item${featured ? ' book-media__item--primary' : ''}`}
-      >
-        <span
-          className="book-media__frame motion-media"
+  return (
+    <div
+      className="book-media"
+      role="region"
+      aria-label="Book photos"
+      tabIndex={items.length > 1 ? 0 : undefined}
+      onKeyDown={onKeyDown}
+    >
+      <figure className="book-media__main">
+        <div
+          className="book-media__frame"
           style={
-            imageLqip(item.image)
-              ? { backgroundImage: `url(${imageLqip(item.image)})` }
+            imageLqip(current.image)
+              ? { backgroundImage: `url(${imageLqip(current.image)})` }
               : undefined
           }
         >
           <MotionImage
-            src={imageSrc(item.image, featured ? 1400 : 800)}
+            key={current.image.asset._ref || safeIndex}
+            src={imageSrc(current.image, 1400)}
             alt={alt}
             width={meta.width}
             height={meta.height}
-            sizes={
-              featured
-                ? '(max-width: 799px) 100vw, 42vw'
-                : '(max-width: 799px) 28vw, 120px'
-            }
-            priority={featured}
-            style={{ width: '100%', height: 'auto', display: 'block' }}
+            sizes="(max-width: 919px) 100vw, 50vw"
+            priority={safeIndex === 0}
+            className="book-media__hero-img"
           />
-        </span>
+        </div>
       </figure>
-    )
-  }
 
-  return (
-    <div className="book-media">
-      {renderFigure(primary, 0, true)}
-      {rest.length ? (
-        <div className="book-media__thumbs">{rest.map((item, i) => renderFigure(item, i + 1, false))}</div>
+      {items.length > 1 ? (
+        <ul className="book-media__thumbs" role="list">
+          {items.map((item, index) => {
+            const thumbMeta = imageMeta(item.image)
+            const thumbAlt = String(item.alt ?? '').trim()
+            const label = thumbAlt || `View photo ${index + 1} of ${items.length}`
+            const isSelected = index === safeIndex
+            return (
+              <li key={item.image.asset._ref || index}>
+                <button
+                  type="button"
+                  className={`book-media__thumb${isSelected ? ' book-media__thumb--selected' : ''}`}
+                  aria-pressed={isSelected}
+                  aria-label={label}
+                  onClick={() => select(index)}
+                >
+                  <MotionImage
+                    src={imageSrc(item.image, 240)}
+                    alt=""
+                    width={thumbMeta.width}
+                    height={thumbMeta.height}
+                    sizes="80px"
+                    aria-hidden
+                    className="book-media__thumb-img"
+                  />
+                </button>
+              </li>
+            )
+          })}
+        </ul>
       ) : null}
     </div>
   )

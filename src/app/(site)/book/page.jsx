@@ -90,50 +90,52 @@ export default async function BookPage(props) {
         </Reveal>
 
         <div className="book-product__info">
-          <Reveal delay={1}>
-            <p className="kicker book-product__kicker">Book</p>
-            <h1 className="book-product__title">{page.title}</h1>
-            {page.priceLabel?.trim() ? (
-              <p className="book-product__price">{page.priceLabel.trim()}</p>
-            ) : null}
-            {availability ? (
-              <p className="book-product__availability" role="status">
-                {availability}
-              </p>
-            ) : null}
-          </Reveal>
-
-          <Reveal delay={2}>
-            <BookDescription value={page.description} />
-          </Reveal>
-
-          {details.length ? (
-            <Reveal delay={2}>
-              <dl className="book-product__meta">
-                {details.map((item) => (
-                  <div key={item.key} className="book-product__meta-row">
-                    <dt>{item.label}</dt>
-                    <dd>{item.node ?? item.text}</dd>
-                  </div>
-                ))}
-              </dl>
-            </Reveal>
-          ) : null}
-
-          <Reveal delay={3}>
-            <div className="book-product__buy">
-              {ordered ? (
-                <p className="form-status" role="status">
-                  Thanks — watch your email for Stripe’s receipt.
+          <div className="book-product__stack">
+            <Reveal delay={1}>
+              <p className="kicker book-product__kicker">Book</p>
+              <h1 className="book-product__title">{page.title}</h1>
+              {page.priceLabel?.trim() ? (
+                <p className="book-product__price">{page.priceLabel.trim()}</p>
+              ) : null}
+              {availability ? (
+                <p className="book-product__availability" role="status">
+                  {availability}
                 </p>
               ) : null}
-              <BookCheckout
-                soldOut={inventory.soldOut}
-                maxQuantity={maxQuantity}
-                checkoutReady={bookStripeConfigured()}
-              />
-            </div>
-          </Reveal>
+            </Reveal>
+
+            <Reveal delay={2}>
+              <BookDescription value={page.description} />
+            </Reveal>
+
+            {details.length ? (
+              <Reveal delay={2}>
+                <dl className="book-product__meta">
+                  {details.map((item) => (
+                    <div key={item.key} className="book-product__meta-row">
+                      <dt>{item.label}</dt>
+                      <dd>{item.node ?? item.text}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </Reveal>
+            ) : null}
+
+            <Reveal delay={3}>
+              <div className="book-product__buy">
+                {ordered ? (
+                  <p className="form-status" role="status">
+                    Thanks — watch your email for Stripe’s receipt.
+                  </p>
+                ) : null}
+                <BookCheckout
+                  soldOut={inventory.soldOut}
+                  maxQuantity={maxQuantity}
+                  checkoutReady={bookStripeConfigured()}
+                />
+              </div>
+            </Reveal>
+          </div>
         </div>
       </div>
     </article>
