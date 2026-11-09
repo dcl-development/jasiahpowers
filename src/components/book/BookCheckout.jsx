@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import BookShare from '@/components/book/BookShare'
 import { MAX_COPIES_PER_ORDER } from '@/lib/bookConstants'
 
 export default function BookCheckout({
@@ -59,9 +60,12 @@ export default function BookCheckout({
           </select>
         </label>
       ) : null}
-      <button className="send motion-press" type="submit" disabled={disabled}>
-        {soldOut ? 'Sold out' : status === 'loading' ? 'Redirecting…' : 'Buy'}
-      </button>
+      <div className="book-checkout__actions">
+        <button className="send motion-press" type="submit" disabled={disabled}>
+          {soldOut ? 'Sold out' : status === 'loading' ? 'Redirecting…' : 'Buy'}
+        </button>
+        <BookShare />
+      </div>
       {!checkoutReady && !soldOut ? (
         <p className="form-status" role="status">
           Checkout is not wired up on this deploy yet.

@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from 'react'
 import MotionImage from '@/components/motion/MotionImage'
-import { imageLqip, imageMeta, imageSrc } from '@/lib/image'
+import { imageMeta, imageSrc } from '@/lib/image'
 
 export default function BookMedia({ photos }) {
   const items = (photos || []).filter((item) => item?.image?.asset)
@@ -29,7 +29,7 @@ export default function BookMedia({ photos }) {
 
   if (!items.length) {
     return (
-      <div className="book-media book-media--empty">
+      <div className="book-media book-media--empty" aria-hidden="true">
         <span className="visually-hidden">Cover photo not added yet</span>
       </div>
     )
@@ -49,14 +49,7 @@ export default function BookMedia({ photos }) {
       onKeyDown={onKeyDown}
     >
       <figure className="book-media__main">
-        <div
-          className="book-media__frame"
-          style={
-            imageLqip(current.image)
-              ? { backgroundImage: `url(${imageLqip(current.image)})` }
-              : undefined
-          }
-        >
+        <div className="book-media__stage">
           <MotionImage
             key={current.image.asset._ref || safeIndex}
             src={imageSrc(current.image, 1400)}
