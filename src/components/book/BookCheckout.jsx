@@ -43,7 +43,7 @@ export default function BookCheckout({
   return (
     <form className="book-checkout" onSubmit={onBuy}>
       {!soldOut && cappedMax > 0 ? (
-        <label className="field book-checkout__qty">
+        <label className="field book-checkout__field">
           <span>Copies</span>
           <select
             name="quantity"

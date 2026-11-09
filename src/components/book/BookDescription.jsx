@@ -22,7 +22,7 @@ const components = {
 export default function BookDescription({ value }) {
   if (!value?.length) return null
   return (
-    <div className="prose book-description">
+    <div className="prose book-product__description">
       <PortableText value={value} components={components} />
     </div>
   )

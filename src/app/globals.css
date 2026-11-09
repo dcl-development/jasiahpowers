@@ -1165,53 +1165,220 @@ code {
   }
 }
 
-.book-page__price {
-  margin-top: 12px;
-  font-size: 20px;
-  font-weight: 500;
-  letter-spacing: -0.02em;
+.book-page {
+  padding-top: 0;
 }
 
-.book-page__details {
-  margin-top: 22px;
-  max-width: 28rem;
+.book-page .kicker {
+  margin-top: 8px;
 }
 
-.book-page__details p {
-  margin-top: 10px;
+.book-product__kicker {
+  margin-bottom: 6px;
 }
 
-.book-description {
-  margin-top: 18px;
-  max-width: 32rem;
-}
-
-.book-photos {
+.book-product {
   display: grid;
-  gap: 14px;
-  margin-top: 22px;
-  max-width: 32rem;
+  gap: 24px 32px;
+  margin-top: 0;
+  align-items: start;
 }
 
-.book-photos__frame {
+.book-product__media {
+  min-width: 0;
+}
+
+.book-media {
+  display: grid;
+  gap: 10px;
+}
+
+.book-media__frame {
   display: block;
   border: 1px solid var(--ink);
   background-color: #fffef8;
   background-size: cover;
   background-position: center;
+  line-height: 0;
 }
 
-.book-page__stock {
-  margin-top: 18px;
+.book-media--empty {
+  aspect-ratio: 3 / 4;
+  max-height: min(72vh, 40rem);
+  border: 1px solid var(--ink);
+  background: #fffef8;
+}
+
+.book-media__thumbs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  gap: 8px;
+  max-width: 100%;
+}
+
+.book-media__item--primary .book-media__frame {
+  max-height: min(72vh, 40rem);
+  overflow: hidden;
+}
+
+.book-product__info {
+  min-width: 0;
+}
+
+.book-product__title {
+  margin-top: 0;
+  font-size: clamp(36px, 5.5vw, 56px);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 0.98;
+  max-width: 14em;
+}
+
+.book-product__price {
+  margin-top: 10px;
+  font-family: var(--font-body);
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.book-product__availability {
+  margin-top: 12px;
   font-size: 15px;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.book-product__description {
+  margin-top: 18px;
+  max-width: 36rem;
+  font-size: 17px;
+}
+
+.book-product__description.prose {
+  margin-top: 18px;
+}
+
+.book-product__buy {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--ink);
+  max-width: 26rem;
+}
+
+.book-product__buy .form-status {
+  margin-top: 0;
+  margin-bottom: 14px;
 }
 
 .book-checkout {
-  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 14px 16px;
 }
 
-.book-checkout__qty {
-  max-width: 12rem;
+.book-checkout__field {
+  flex: 1 1 7.5rem;
+  max-width: 9rem;
+  margin-top: 0;
+}
+
+.book-checkout__field select {
+  min-height: 44px;
+}
+
+.book-checkout .send {
+  margin-top: 0;
+  flex: 0 0 auto;
+  min-height: 44px;
+  min-width: 6.5rem;
+}
+
+.book-product__meta {
+  margin: 22px 0 0;
+  padding: 0;
+  max-width: 36rem;
+}
+
+.book-product__meta-row {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr;
+  gap: 12px 16px;
+  padding: 12px 0 0;
+  align-items: start;
+}
+
+.book-product__meta dt {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  line-height: 1.35;
+}
+
+.book-product__meta dd {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+@media (max-width: 799px) {
+  .book-checkout {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .book-checkout__field {
+    flex: 1 1 auto;
+    max-width: none;
+  }
+
+  .book-checkout .send {
+    width: 100%;
+    text-align: center;
+  }
+
+  .book-media--empty {
+    max-height: none;
+  }
+}
+
+@media (min-width: 800px) {
+  .book-product {
+    grid-template-columns: minmax(0, 1.15fr) minmax(18rem, 23rem);
+    gap: 40px 56px;
+    max-width: 72rem;
+  }
+
+  .book-page .kicker {
+    margin-top: 0;
+  }
+
+  .book-product__info {
+    position: sticky;
+    top: 72px;
+  }
+
+  .book-product__buy,
+  .book-product__meta,
+  .book-product__description {
+    max-width: none;
+  }
+
+  .book-media__thumbs {
+    grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+    max-width: 32rem;
+  }
+}
+
+@media (min-width: 1040px) {
+  .book-product {
+    grid-template-columns: minmax(0, 1.35fr) minmax(20rem, 26rem);
+    gap: 48px 72px;
+  }
 }
 
 .studio-root {

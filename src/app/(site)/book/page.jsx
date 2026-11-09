@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import BookCheckout from '@/components/book/BookCheckout'
 import BookDescription from '@/components/book/BookDescription'
-import BookPhotos from '@/components/book/BookPhotos'
+import BookMedia from '@/components/book/BookMedia'
 import Reveal from '@/components/motion/Reveal'
 import { getBookInventoryState, quantityLimit } from '@/lib/bookInventory'
 import { bookPageQuery } from '@/lib/queries'
@@ -32,22 +32,34 @@ function detailLines(page) {
   const shipping = page.shippingSummary?.trim()
   const refund = page.refundSummary?.trim()
   const email = page.supportEmail?.trim()
-  if (shipping) lines.push({ key: 'shipping', text: shipping })
+  if (shipping) lines.push({ key: 'shipping', label: 'Shipping', text: shipping })
+  if (refund) lines.push({ key: 'refund', label: 'Refunds', text: refund })
   if (email) {
     lines.push({
       key: 'support',
+      label: 'Support',
       node: (
-        <>
-          Questions and receipts:{' '}
-          <a className="motion-link" href={contactHref(email)}>
-            {email}
-          </a>
-        </>
+        <a className="motion-link" href={contactHref(email)}>
+          {email}
+        </a>
       ),
     })
   }
-  if (refund) lines.push({ key: 'refund', text: refund })
   return lines
+}
+
+function availabilityNote(inventory) {
+  if (inventory.paused && inventory.remaining > 0) {
+    return 'Sales are paused.'
+  }
+  if (inventory.soldOut) {
+    return 'Sold out'
+  }
+  if (inventory.showRemaining) {
+    const n = inventory.remaining
+    return `${n} ${n === 1 ? 'copy' : 'copies'} left`
+  }
+  return null
 }
 
 export default async function BookPage(props) {
@@ -68,52 +80,62 @@ export default async function BookPage(props) {
   const inventory = await getBookInventoryState()
   const maxQuantity = quantityLimit(inventory.remaining)
   const details = detailLines(page)
+  const availability = availabilityNote(inventory)
 
   return (
-    <div className="plain-page book-page">
-      <Reveal>
-        <p className="kicker">Book</p>
-        <h1>{page.title}</h1>
-        {page.priceLabel?.trim() ? (
-          <p className="book-page__price">{page.priceLabel.trim()}</p>
-        ) : null}
-      </Reveal>
-
-      <Reveal delay={1}>
-        <BookDescription value={page.description} />
-      </Reveal>
-
-      <Reveal delay={1}>
-        <BookPhotos photos={page.photos} />
-      </Reveal>
-
-      {details.length ? (
-        <Reveal delay={2}>
-          <div className="book-page__details">
-            {details.map((item) => (
-              <p key={item.key}>{item.node ?? item.text}</p>
-            ))}
-          </div>
+    <article className="book-page">
+      <div className="book-product">
+        <Reveal className="book-product__media" delay={1}>
+          <BookMedia photos={page.photos} />
         </Reveal>
-      ) : null}
 
-      <Reveal delay={2}>
-        {inventory.showRemaining ? (
-          <p className="book-page__stock" role="status">
-            {inventory.remaining} {inventory.remaining === 1 ? 'copy' : 'copies'} left
-          </p>
-        ) : null}
-        {ordered ? (
-          <p className="form-status" role="status">
-            Thanks — watch your email for Stripe’s receipt.
-          </p>
-        ) : null}
-        <BookCheckout
-          soldOut={inventory.soldOut}
-          maxQuantity={maxQuantity}
-          checkoutReady={bookStripeConfigured()}
-        />
-      </Reveal>
-    </div>
+        <div className="book-product__info">
+          <Reveal delay={1}>
+            <p className="kicker book-product__kicker">Book</p>
+            <h1 className="book-product__title">{page.title}</h1>
+            {page.priceLabel?.trim() ? (
+              <p className="book-product__price">{page.priceLabel.trim()}</p>
+            ) : null}
+            {availability ? (
+              <p className="book-product__availability" role="status">
+                {availability}
+              </p>
+            ) : null}
+          </Reveal>
+
+          <Reveal delay={2}>
+            <BookDescription value={page.description} />
+          </Reveal>
+
+          {details.length ? (
+            <Reveal delay={2}>
+              <dl className="book-product__meta">
+                {details.map((item) => (
+                  <div key={item.key} className="book-product__meta-row">
+                    <dt>{item.label}</dt>
+                    <dd>{item.node ?? item.text}</dd>
+                  </div>
+                ))}
+              </dl>
+            </Reveal>
+          ) : null}
+
+          <Reveal delay={3}>
+            <div className="book-product__buy">
+              {ordered ? (
+                <p className="form-status" role="status">
+                  Thanks — watch your email for Stripe’s receipt.
+                </p>
+              ) : null}
+              <BookCheckout
+                soldOut={inventory.soldOut}
+                maxQuantity={maxQuantity}
+                checkoutReady={bookStripeConfigured()}
+              />
+            </div>
+          </Reveal>
+        </div>
+      </div>
+    </article>
   )
 }
