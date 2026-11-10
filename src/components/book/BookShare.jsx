@@ -43,9 +43,26 @@ export default function BookShare() {
       <button
         type="button"
         className="send motion-press book-share__btn"
+        aria-label="Share"
         onClick={onShare}
       >
-        Share
+        <span className="book-share__label">Share</span>
+        <svg
+          className="book-share__icon"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
+        >
+          <path
+            d="M14 4h6v6M10 20H4v-6M20 4l-8.5 8.5M4 20l8.5-8.5"
+            stroke="currentColor"
+            strokeWidth="1.75"
+            strokeLinecap="square"
+          />
+        </svg>
       </button>
       {note ? (
         <span className="book-share__note" role="status" aria-live="polite">

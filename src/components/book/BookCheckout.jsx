@@ -43,25 +43,30 @@ export default function BookCheckout({
 
   return (
     <form className="book-checkout" onSubmit={onBuy}>
-      {!soldOut && cappedMax > 0 ? (
-        <label className="field book-checkout__field">
-          <span>Copies</span>
-          <select
-            name="quantity"
-            value={Math.min(quantity, cappedMax)}
-            onChange={(event) => setQuantity(Number(event.target.value))}
-            disabled={disabled}
-          >
-            {Array.from({ length: cappedMax }, (_, i) => i + 1).map((n) => (
-              <option key={n} value={n}>
-                {n}
-              </option>
-            ))}
-          </select>
-        </label>
-      ) : null}
-      <div className="book-checkout__actions">
-        <button className="send motion-press" type="submit" disabled={disabled}>
+      <div className="book-checkout__bar">
+        {!soldOut && cappedMax > 0 ? (
+          <label className="field book-checkout__field">
+            <span className="book-checkout__field-label">Copies</span>
+            <select
+              name="quantity"
+              value={Math.min(quantity, cappedMax)}
+              onChange={(event) => setQuantity(Number(event.target.value))}
+              disabled={disabled}
+              aria-label="Number of copies"
+            >
+              {Array.from({ length: cappedMax }, (_, i) => i + 1).map((n) => (
+                <option key={n} value={n}>
+                  {n}
+                </option>
+              ))}
+            </select>
+          </label>
+        ) : null}
+        <button
+          className="send motion-press book-checkout__buy"
+          type="submit"
+          disabled={disabled}
+        >
           {soldOut ? 'Sold out' : status === 'loading' ? 'Redirecting…' : 'Buy'}
         </button>
         <BookShare />
