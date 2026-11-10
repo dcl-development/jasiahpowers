@@ -481,12 +481,6 @@ html.intro-pending.intro-reveal .site-header {
   animation: reel-scroll var(--reel-duration, 48s) linear infinite;
 }
 
-.reel:hover .reel__track,
-.reel:focus-within .reel__track,
-.reel:active .reel__track {
-  animation-play-state: paused;
-}
-
 .reel__set {
   display: flex;
   gap: 8px;
