@@ -9,6 +9,7 @@ export default defineType({
   title: 'Book',
   type: 'document',
   fieldsets: [
+    {name: 'announcement', title: 'Homepage announcement'},
     {name: 'commerce', title: 'Sales'},
     {name: 'copy', title: 'Shipping and refunds'},
     {name: 'seo', title: 'SEO'},
@@ -22,6 +23,25 @@ export default defineType({
       description: 'The heading on the Book page.',
       initialValue: "Let's figure it out",
       validation: (Rule) => Rule.required().error('The book page needs a title.'),
+    }),
+    defineField({
+      name: 'showHomeAnnouncement',
+      title: 'Show homepage announcement',
+      type: 'boolean',
+      fieldset: 'announcement',
+      description:
+        'Shows a black announcement bar on the homepage that links to the Book page. Off by default.',
+      initialValue: false,
+    }),
+    defineField({
+      name: 'homeAnnouncementText',
+      title: 'Homepage announcement text',
+      type: 'string',
+      fieldset: 'announcement',
+      description:
+        'Short line in the homepage bar. Leave empty to hide the bar even when the toggle is on.',
+      validation: (Rule) =>
+        Rule.max(140).warning('Keep this short so it fits in the bar.'),
     }),
     defineField({
       name: 'description',

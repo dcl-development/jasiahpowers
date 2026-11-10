@@ -1,12 +1,20 @@
+import BookHomeAnnouncement from '@/components/book/BookHomeAnnouncement'
 import HomeIntro from '@/components/HomeIntro'
 import FeaturedReel from '@/components/projects/FeaturedReel'
 import Reveal from '@/components/motion/Reveal'
 
-export default function HomePage({ title, videoId, welcomeMessage, projects }) {
+export default function HomePage({
+  title,
+  videoId,
+  welcomeMessage,
+  projects,
+  announcementText = '',
+}) {
   const message = welcomeMessage?.trim()
 
   return (
     <div className="home">
+      <BookHomeAnnouncement text={announcementText} />
       <HomeIntro title={title} />
       <h1 className="visually-hidden">{title}</h1>
       {message ? (

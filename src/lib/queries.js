@@ -18,6 +18,11 @@ export const homePageQuery = `*[_type == "homePage"][0]{
   }
 }`
 
+export const bookHomeAnnouncementQuery = `*[_type == "bookPage"][0]{
+  showHomeAnnouncement,
+  homeAnnouncementText
+}`
+
 export const bookPageQuery = `*[_type == "bookPage"][0]{
   title,
   description,

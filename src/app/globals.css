@@ -1515,6 +1515,77 @@ code {
   }
 }
 
+.book-announcement {
+  display: block;
+  width: calc(100% + (2 * var(--gutter)));
+  margin-left: calc(-1 * var(--gutter));
+  margin-bottom: 18px;
+  background: var(--ink);
+  color: #f4efe6;
+  text-decoration: none;
+  border-bottom: 1px solid var(--ink);
+}
+
+.book-announcement:focus-visible {
+  outline: 2px solid #f4efe6;
+  outline-offset: -2px;
+}
+
+.book-announcement__viewport {
+  overflow: hidden;
+  width: 100%;
+  padding: 10px 0;
+}
+
+.book-announcement__track {
+  display: flex;
+  width: max-content;
+  gap: 3rem;
+}
+
+.book-announcement__text {
+  flex: 0 0 auto;
+  padding-left: var(--gutter);
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .book-announcement__track {
+    animation: book-announcement-marquee 28s linear infinite;
+  }
+
+  .book-announcement:hover .book-announcement__track,
+  .book-announcement:focus-visible .book-announcement__track {
+    animation-play-state: paused;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .book-announcement__track {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .book-announcement__text[aria-hidden='true'] {
+    display: none;
+  }
+}
+
+@keyframes book-announcement-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
 .studio-root {
   height: 100vh;
   height: 100dvh;
