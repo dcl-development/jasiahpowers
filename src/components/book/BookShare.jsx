@@ -46,21 +46,38 @@ export default function BookShare() {
         aria-label="Share"
         onClick={onShare}
       >
-        <span className="book-share__label">Share</span>
         <svg
           className="book-share__icon"
-          width="20"
-          height="20"
+          width="22"
+          height="22"
           viewBox="0 0 24 24"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           aria-hidden="true"
         >
           <path
-            d="M14 4h6v6M10 20H4v-6M20 4l-8.5 8.5M4 20l8.5-8.5"
+            d="M8 11.5v7.5h8v-7.5"
+            stroke="currentColor"
+            strokeWidth="1.75"
+          />
+          <path
+            d="M7 11.5h4M13 11.5h4"
             stroke="currentColor"
             strokeWidth="1.75"
             strokeLinecap="square"
+          />
+          <path
+            d="M12 16V6"
+            stroke="currentColor"
+            strokeWidth="1.75"
+            strokeLinecap="square"
+          />
+          <path
+            d="M9.25 8.75 12 6l2.75 2.75"
+            stroke="currentColor"
+            strokeWidth="1.75"
+            strokeLinecap="square"
+            strokeLinejoin="miter"
           />
         </svg>
       </button>

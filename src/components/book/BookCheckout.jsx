@@ -44,9 +44,16 @@ export default function BookCheckout({
   return (
     <form className="book-checkout" onSubmit={onBuy}>
       <div className="book-checkout__bar">
+        <button
+          className="send motion-press book-checkout__buy"
+          type="submit"
+          disabled={disabled}
+        >
+          {soldOut ? 'Sold out' : status === 'loading' ? 'Redirecting…' : 'Buy'}
+        </button>
         {!soldOut && cappedMax > 0 ? (
           <label className="field book-checkout__field">
-            <span className="book-checkout__field-label">Copies</span>
+            <span className="visually-hidden">Copies</span>
             <select
               name="quantity"
               value={Math.min(quantity, cappedMax)}
@@ -62,13 +69,6 @@ export default function BookCheckout({
             </select>
           </label>
         ) : null}
-        <button
-          className="send motion-press book-checkout__buy"
-          type="submit"
-          disabled={disabled}
-        >
-          {soldOut ? 'Sold out' : status === 'loading' ? 'Redirecting…' : 'Buy'}
-        </button>
         <BookShare />
       </div>
       {!checkoutReady && !soldOut ? (
