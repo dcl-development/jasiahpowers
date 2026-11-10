@@ -1366,18 +1366,26 @@ code {
   width: auto;
   max-width: none;
   margin-top: 0;
-  gap: 4px;
+  gap: 0;
+  border: none;
+  padding: 0;
+  background: transparent;
 }
 
 .book-checkout__field select {
   width: 3.4rem;
   min-width: 3.4rem;
   min-height: 44px;
+  margin: 0;
   padding: 10px 1.35rem 10px 0.5rem;
+  border: 1px solid var(--ink);
+  border-radius: 0;
+  background-color: transparent;
   text-align: center;
   text-align-last: center;
   appearance: none;
   -webkit-appearance: none;
+  box-shadow: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23111111' stroke-width='1.5' stroke-linecap='square'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0.5rem center;
@@ -1389,6 +1397,18 @@ code {
   min-height: 44px;
   flex: 1 1 auto;
   text-align: center;
+  background: var(--ink);
+  color: #f4efe6;
+}
+
+.book-checkout__buy:hover:not(:disabled) {
+  background: var(--ink);
+  color: #f4efe6;
+}
+
+.book-checkout__buy:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .book-share {
@@ -1414,6 +1434,8 @@ code {
 
 .book-share__icon {
   display: block;
+  width: 26px;
+  height: 26px;
 }
 
 .book-share__note {

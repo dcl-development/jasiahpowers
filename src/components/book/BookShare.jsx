@@ -48,8 +48,6 @@ export default function BookShare() {
       >
         <svg
           className="book-share__icon"
-          width="22"
-          height="22"
           viewBox="0 0 24 24"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
@@ -58,25 +56,15 @@ export default function BookShare() {
           <path
             d="M8 11.5v7.5h8v-7.5"
             stroke="currentColor"
-            strokeWidth="1.75"
+            strokeWidth="1.65"
           />
+          <path d="M8 11.5h2.35" stroke="currentColor" strokeWidth="1.65" />
+          <path d="M13.65 11.5H16" stroke="currentColor" strokeWidth="1.65" />
+          <path d="M12 16.25V5.75" stroke="currentColor" strokeWidth="1.65" />
           <path
-            d="M7 11.5h4M13 11.5h4"
+            d="M9.6 8.35 12 5.75l2.4 2.6"
             stroke="currentColor"
-            strokeWidth="1.75"
-            strokeLinecap="square"
-          />
-          <path
-            d="M12 16V6"
-            stroke="currentColor"
-            strokeWidth="1.75"
-            strokeLinecap="square"
-          />
-          <path
-            d="M9.25 8.75 12 6l2.75 2.75"
-            stroke="currentColor"
-            strokeWidth="1.75"
-            strokeLinecap="square"
+            strokeWidth="1.65"
             strokeLinejoin="miter"
           />
         </svg>
