@@ -1532,15 +1532,39 @@ code {
 }
 
 .book-announcement__viewport {
+  position: relative;
   overflow: hidden;
   width: 100%;
   padding: 10px 0;
 }
 
+.book-announcement__measure {
+  position: absolute;
+  left: 0;
+  top: 0;
+  visibility: hidden;
+  height: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  pointer-events: none;
+}
+
 .book-announcement__track {
   display: flex;
-  width: max-content;
   gap: 3rem;
+}
+
+.book-announcement__track--static {
+  width: 100%;
+  justify-content: center;
+}
+
+.book-announcement__track--scroll {
+  width: max-content;
 }
 
 .book-announcement__text {
@@ -1554,25 +1578,13 @@ code {
   white-space: nowrap;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .book-announcement__track {
-    animation: book-announcement-marquee 28s linear infinite;
-  }
-
-  .book-announcement:hover .book-announcement__track,
-  .book-announcement:focus-visible .book-announcement__track {
-    animation-play-state: paused;
-  }
+.book-announcement__track--static .book-announcement__text {
+  padding-right: var(--gutter);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .book-announcement__track {
-    width: 100%;
-    justify-content: flex-start;
-  }
-
-  .book-announcement__text[aria-hidden='true'] {
-    display: none;
+@media (prefers-reduced-motion: no-preference) {
+  .book-announcement__track--scroll {
+    animation: book-announcement-marquee 28s linear infinite;
   }
 }
 
