@@ -3,9 +3,9 @@
 import { useRouter } from 'next/navigation'
 import { useCallback } from 'react'
 import { useStoreCountdown } from '@/hooks/useStoreCountdown'
-import { formatCountdownLine } from '@/lib/storeCountdown'
+import { formatCountdown } from '@/lib/storeCountdown'
 
-export default function ShopLaunchCountdown({ countdownPrefix = '' }) {
+export default function ShopLaunchCountdown() {
   const router = useRouter()
   const onReachZero = useCallback(() => {
     router.refresh()
@@ -15,7 +15,7 @@ export default function ShopLaunchCountdown({ countdownPrefix = '' }) {
 
   if (!isClient || launched || remainingMs === null) return null
 
-  const line = formatCountdownLine(countdownPrefix, remainingMs)
+  const line = formatCountdown(remainingMs)
 
   return (
     <p className="book-product__launch-countdown" role="timer" suppressHydrationWarning>
