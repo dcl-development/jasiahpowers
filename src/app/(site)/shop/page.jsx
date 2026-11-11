@@ -69,7 +69,7 @@ function availabilityNote(inventory) {
   return null
 }
 
-function ComingSoonShop({ page, countdownPrefix }) {
+function ComingSoonShop({ page }) {
   const coverPhotos = page.photos?.length
     ? [page.photos.find((item) => item?.image?.asset) || page.photos[0]]
     : []
@@ -90,7 +90,7 @@ function ComingSoonShop({ page, countdownPrefix }) {
               <p className="book-product__coming-soon" role="status">
                 Coming soon
               </p>
-              <ShopLaunchCountdown countdownPrefix={countdownPrefix} />
+              <ShopLaunchCountdown />
             </Reveal>
           </div>
         </div>
@@ -118,10 +118,7 @@ export default async function ShopPage(props) {
 
   if (!storeOpen) {
     return (
-      <ComingSoonShop
-        page={page}
-        countdownPrefix={page.homeCountdownText?.trim() || ''}
-      />
+      <ComingSoonShop page={page} />
     )
   }
 
