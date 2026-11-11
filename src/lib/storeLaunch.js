@@ -1,5 +1,6 @@
 export const DEFAULT_LAUNCH_AT = '2026-11-14T05:00:00Z'
 export const STORE_PREVIEW_COOKIE = 'jp_store_preview'
+const PREVIEW_HMAC_MESSAGE = 'store-preview'
 
 export function getLaunchAtIso() {
   const fromEnv = process.env.STORE_LAUNCH_AT?.trim()
@@ -41,17 +42,48 @@ function previewCookieValue(source) {
   return entry.value ?? null
 }
 
+function bufferToHex(buffer) {
+  return Array.from(new Uint8Array(buffer), (byte) =>
+    byte.toString(16).padStart(2, '0')
+  ).join('')
+}
+
+export async function createPreviewCookieValue(secret) {
+  if (!secret?.length) return null
+  const key = await crypto.subtle.importKey(
+    'raw',
+    new TextEncoder().encode(secret),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign']
+  )
+  const signature = await crypto.subtle.sign(
+    'HMAC',
+    key,
+    new TextEncoder().encode(PREVIEW_HMAC_MESSAGE)
+  )
+  return bufferToHex(signature)
+}
+
+async function previewCookieMatchesSecret(cookieValue, secret) {
+  if (!cookieValue || !secret?.length) return false
+  const expected = await createPreviewCookieValue(secret)
+  if (!expected) return false
+  return constantTimeEqualStrings(cookieValue, expected)
+}
+
 /**
  * @param {Request | import('next/dist/compiled/@edge-runtime/cookies').ReadonlyRequestCookies} request
  */
-export function isStoreOpen(request) {
+export async function isStoreOpen(request) {
   if (isLaunchTimeReached()) return true
-  if (!process.env.STORE_PREVIEW_TOKEN?.length) return false
+  const secret = process.env.STORE_PREVIEW_TOKEN
+  if (!secret?.length) return false
   const cookieSource =
     request?.cookies && typeof request.cookies.get === 'function'
       ? request.cookies
       : request
-  return previewCookieValue(cookieSource) === '1'
+  return previewCookieMatchesSecret(previewCookieValue(cookieSource), secret)
 }
 
 export function previewCookieOptions() {

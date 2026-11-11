@@ -24,7 +24,7 @@ export default async function Page() {
   const projects = picked.length ? picked : allProjects || []
 
   const cookieStore = await cookies()
-  const storeOpen = isStoreOpen(cookieStore)
+  const storeOpen = await isStoreOpen(cookieStore)
   const announcementText = book?.showHomeAnnouncement
     ? book?.homeAnnouncementText?.trim() || ''
     : ''

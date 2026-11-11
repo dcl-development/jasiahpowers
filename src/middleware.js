@@ -1,20 +1,27 @@
 import { NextResponse } from 'next/server'
 import {
+  createPreviewCookieValue,
   previewCookieOptions,
   STORE_PREVIEW_COOKIE,
   verifyPreviewToken,
 } from '@/lib/storeLaunch'
 
-export function middleware(request) {
+export async function middleware(request) {
   const preview = request.nextUrl.searchParams.get('preview')
   if (!preview || !verifyPreviewToken(preview)) {
+    return NextResponse.next()
+  }
+
+  const secret = process.env.STORE_PREVIEW_TOKEN
+  const cookieValue = await createPreviewCookieValue(secret)
+  if (!cookieValue) {
     return NextResponse.next()
   }
 
   const url = request.nextUrl.clone()
   url.searchParams.delete('preview')
   const response = NextResponse.redirect(url)
-  response.cookies.set(STORE_PREVIEW_COOKIE, '1', previewCookieOptions())
+  response.cookies.set(STORE_PREVIEW_COOKIE, cookieValue, previewCookieOptions())
   return response
 }
 

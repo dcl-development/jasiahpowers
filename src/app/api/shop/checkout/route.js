@@ -21,7 +21,7 @@ function siteUrl(request) {
 }
 
 export async function POST(request) {
-  if (!isStoreOpen(request)) {
+  if (!(await isStoreOpen(request))) {
     return Response.json({ error: 'Store is not open yet.' }, { status: 403 })
   }
 

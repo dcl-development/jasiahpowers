@@ -101,7 +101,7 @@ export default async function ShopPage(props) {
   const searchParams = await props.searchParams
   const ordered = searchParams?.ordered === '1'
   const cookieStore = await cookies()
-  const storeOpen = isStoreOpen(cookieStore)
+  const storeOpen = await isStoreOpen(cookieStore)
 
   let page = null
   try {

@@ -18,7 +18,7 @@ export default async function SiteFrame({ children }) {
   const title = settings?.title || 'Jasiah Powers'
   const musicLink = settings?.musicLink || FALLBACK_MUSIC
   const cookieStore = await cookies()
-  const storeOpen = isStoreOpen(cookieStore)
+  const storeOpen = await isStoreOpen(cookieStore)
   const launchAt = getLaunchAtIso()
 
   return (
