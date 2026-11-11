@@ -93,8 +93,8 @@ export async function POST(request) {
       ],
       automatic_tax: { enabled: true },
       expires_at: expiresAt,
-      success_url: `${origin}/book?ordered=1`,
-      cancel_url: `${origin}/book`,
+      success_url: `${origin}/shop?ordered=1`,
+      cancel_url: `${origin}/shop`,
       metadata: {
         product: BOOK_CHECKOUT_METADATA,
         quantity: String(requested),

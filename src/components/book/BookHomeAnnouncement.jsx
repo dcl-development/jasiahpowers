@@ -42,7 +42,7 @@ export default function BookHomeAnnouncement({ text }) {
   const marquee = overflows && !reducedMotion
 
   return (
-    <Link href="/book" className="book-announcement">
+    <Link href="/shop" className="book-announcement">
       <div className="book-announcement__viewport" ref={viewportRef}>
         <span className="book-announcement__measure" ref={measureRef} aria-hidden="true">
           {line}

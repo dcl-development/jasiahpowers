@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-const PRODUCTION_BOOK_URL = 'https://jasiahpowers.com/book'
+const PRODUCTION_BOOK_URL = 'https://jasiahpowers.com/shop'
 
 function shareUrl() {
   if (typeof window === 'undefined') return PRODUCTION_BOOK_URL
