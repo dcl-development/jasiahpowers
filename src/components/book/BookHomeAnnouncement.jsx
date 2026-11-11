@@ -2,13 +2,16 @@
 
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
+import { useStoreLaunched } from '@/hooks/useStoreLaunched'
 
-export default function BookHomeAnnouncement({ text }) {
+export default function BookHomeAnnouncement({ text, storeOpen = false }) {
   const line = String(text || '').trim()
   const viewportRef = useRef(null)
   const measureRef = useRef(null)
   const [overflows, setOverflows] = useState(false)
   const [reducedMotion, setReducedMotion] = useState(false)
+  const launched = useStoreLaunched()
+  const storeVisible = storeOpen || launched
 
   useEffect(() => {
     if (!line) return undefined
@@ -37,7 +40,7 @@ export default function BookHomeAnnouncement({ text }) {
     }
   }, [line])
 
-  if (!line) return null
+  if (!line || !storeVisible) return null
 
   const marquee = overflows && !reducedMotion
 

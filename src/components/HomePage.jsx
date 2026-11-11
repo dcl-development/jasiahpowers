@@ -9,12 +9,13 @@ export default function HomePage({
   welcomeMessage,
   projects,
   announcementText = '',
+  storeOpen = false,
 }) {
   const message = welcomeMessage?.trim()
 
   return (
     <div className="home">
-      <BookHomeAnnouncement text={announcementText} />
+      <BookHomeAnnouncement text={announcementText} storeOpen={storeOpen} />
       <HomeIntro title={title} />
       <h1 className="visually-hidden">{title}</h1>
       {message ? (

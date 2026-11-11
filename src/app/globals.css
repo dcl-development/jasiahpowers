@@ -1319,6 +1319,22 @@ code {
   line-height: 1.35;
 }
 
+.book-product__coming-soon {
+  margin-top: 16px;
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.35;
+}
+
+.book-product--soon {
+  align-items: start;
+}
+
+.book-page--soon .book-product--soon:has(.book-product__media) {
+  gap: clamp(24px, 4vw, 48px);
+}
+
 .book-product__description {
   margin-top: 18px;
   font-size: 17px;

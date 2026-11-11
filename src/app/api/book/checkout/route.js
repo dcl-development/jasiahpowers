@@ -9,6 +9,7 @@ import {
   bookStripeConfigured,
   MAX_COPIES_PER_ORDER,
 } from '@/lib/stripe'
+import { isStoreOpen } from '@/lib/storeLaunch'
 
 function siteUrl(request) {
   const fromEnv = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '')
@@ -20,6 +21,10 @@ function siteUrl(request) {
 }
 
 export async function POST(request) {
+  if (!isStoreOpen(request)) {
+    return Response.json({ error: 'Store is not open yet.' }, { status: 403 })
+  }
+
   if (!bookStripeConfigured()) {
     return Response.json(
       { error: 'Checkout is not configured yet.' },

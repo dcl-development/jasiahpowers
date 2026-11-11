@@ -7,6 +7,8 @@ import {
   siteSettingsQuery,
 } from '@/lib/queries'
 import { youtubeId } from '@/lib/site'
+import { isStoreOpen } from '@/lib/storeLaunch'
+import { cookies } from 'next/headers'
 
 export const revalidate = 60
 
@@ -21,6 +23,8 @@ export default async function Page() {
   const picked = (home?.featuredProjects || []).filter((project) => project?._id)
   const projects = picked.length ? picked : allProjects || []
 
+  const cookieStore = await cookies()
+  const storeOpen = isStoreOpen(cookieStore)
   const announcementText = book?.showHomeAnnouncement
     ? book?.homeAnnouncementText?.trim() || ''
     : ''
@@ -32,6 +36,7 @@ export default async function Page() {
       welcomeMessage={home?.welcomeMessage || ''}
       projects={projects}
       announcementText={announcementText}
+      storeOpen={storeOpen}
     />
   )
 }

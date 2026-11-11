@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
+import { useStoreLaunched } from '@/hooks/useStoreLaunched'
 
 const NAV = [
   { href: '/projects', label: 'Projects' },
@@ -12,8 +13,10 @@ const NAV = [
   { href: '/contact', label: 'Contact' },
 ]
 
-export default function Header({ title, musicLink }) {
+export default function Header({ title, musicLink, storeOpen = false }) {
   const pathname = usePathname()
+  const launched = useStoreLaunched()
+  const showShop = storeOpen || launched
 
   return (
     <header className="site-header">
@@ -33,7 +36,7 @@ export default function Header({ title, musicLink }) {
         </Link>
         <nav className="site-nav" aria-label="Primary">
           <div className="site-nav__group">
-            {NAV.map((item) => {
+            {NAV.filter((item) => item.href !== '/shop' || showShop).map((item) => {
               const active =
                 pathname === item.href || pathname.startsWith(`${item.href}/`)
               return (

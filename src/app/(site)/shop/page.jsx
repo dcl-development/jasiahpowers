@@ -8,8 +8,10 @@ import { bookPageQuery } from '@/lib/queries'
 import { sanityFetch } from '@/lib/sanity'
 import { bookStripeConfigured } from '@/lib/stripe'
 import { contactHref } from '@/lib/site'
+import { isStoreOpen } from '@/lib/storeLaunch'
+import { cookies } from 'next/headers'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 export async function generateMetadata() {
   let page = null
@@ -66,9 +68,40 @@ function availabilityNote(inventory) {
   return null
 }
 
-export default async function BookPage(props) {
+function ComingSoonShop({ page }) {
+  const coverPhotos = page.photos?.length
+    ? [page.photos.find((item) => item?.image?.asset) || page.photos[0]]
+    : []
+
+  return (
+    <article className="book-page book-page--soon">
+      <div className="book-product book-product--soon">
+        {coverPhotos.length ? (
+          <Reveal className="book-product__media" delay={1}>
+            <BookMedia photos={coverPhotos} />
+          </Reveal>
+        ) : null}
+        <div className="book-product__info">
+          <div className="book-product__stack">
+            <Reveal delay={1}>
+              <p className="kicker book-product__kicker">Book</p>
+              <h1 className="book-product__title">{page.title}</h1>
+              <p className="book-product__coming-soon" role="status">
+                Coming soon
+              </p>
+            </Reveal>
+          </div>
+        </div>
+      </div>
+    </article>
+  )
+}
+
+export default async function ShopPage(props) {
   const searchParams = await props.searchParams
   const ordered = searchParams?.ordered === '1'
+  const cookieStore = await cookies()
+  const storeOpen = isStoreOpen(cookieStore)
 
   let page = null
   try {
@@ -79,6 +112,10 @@ export default async function BookPage(props) {
 
   if (!page?.title?.trim()) {
     notFound()
+  }
+
+  if (!storeOpen) {
+    return <ComingSoonShop page={page} />
   }
 
   const inventory = await getBookInventoryState()
