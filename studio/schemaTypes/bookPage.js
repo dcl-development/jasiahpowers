@@ -6,23 +6,27 @@ export {BOOK_DOC_ID}
 
 export default defineType({
   name: 'bookPage',
-  title: 'Book',
+  title: 'Shop',
   type: 'document',
   fieldsets: [
     {name: 'announcement', title: 'Homepage announcement'},
     {name: 'commerce', title: 'Sales'},
     {name: 'copy', title: 'Shipping and refunds'},
     {name: 'seo', title: 'SEO'},
-    {name: 'inventory', title: 'Inventory (automatic)'},
+    {
+      name: 'inventory',
+      title: 'Inventory (automatic)',
+      description: 'Sold count and session ids update from paid orders. Do not edit by hand.',
+    },
   ],
   fields: [
     defineField({
       name: 'title',
       title: 'Book title',
       type: 'string',
-      description: 'The heading on the Book page.',
+      description: 'The heading on the Shop page (/shop).',
       initialValue: "Let's figure it out",
-      validation: (Rule) => Rule.required().error('The book page needs a title.'),
+      validation: (Rule) => Rule.required().error('The Shop page needs a title.'),
     }),
     defineField({
       name: 'showHomeAnnouncement',
@@ -30,7 +34,7 @@ export default defineType({
       type: 'boolean',
       fieldset: 'announcement',
       description:
-        'Shows a black announcement bar on the homepage that links to the Book page. Off by default.',
+        'Shows a black announcement bar on the homepage that links to the Shop page (/shop). Off by default. The bar only appears once the store opens (12:00 AM ET Sat Nov 14) even if this is switched on earlier.',
       initialValue: false,
     }),
     defineField({
@@ -49,14 +53,14 @@ export default defineType({
       type: 'array',
       of: [{type: 'block'}],
       description:
-        'Optional. Shown on the Book page when filled in. Leave empty until Jasiah adds real copy.',
+        'Optional. Shown on the Shop page (/shop) when filled in. Leave empty until Jasiah adds real copy.',
     }),
     defineField({
       name: 'photos',
       title: 'Photos',
       type: 'array',
       description:
-        'Optional cover and detail shots for the Book page. Leave empty until real photos are ready.',
+        'Optional cover and detail shots for the Shop page (/shop). Leave empty until real photos are ready.',
       of: [
         defineArrayMember({
           type: 'object',
@@ -145,7 +149,8 @@ export default defineType({
       type: 'number',
       fieldset: 'inventory',
       readOnly: true,
-      description: 'Updated automatically when Stripe marks an order paid.',
+      description:
+        'Read-only. Increases automatically when Stripe marks an order paid. You do not need to change this.',
       initialValue: 0,
     }),
     defineField({
@@ -170,7 +175,7 @@ export default defineType({
   ],
   preview: {
     prepare() {
-      return {title: 'Book'}
+      return {title: 'Shop'}
     },
   },
 })

@@ -20,7 +20,7 @@ export async function generateMetadata() {
   } catch {
     page = null
   }
-  if (!page?.title) return { title: 'Book', alternates: { canonical: '/shop' } }
+  if (!page?.title) return { title: 'Shop', alternates: { canonical: '/shop' } }
   const description = page.seoDescription?.trim() || undefined
   return {
     title: page.title,

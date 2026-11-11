@@ -24,6 +24,6 @@ export const structure = (S, context) =>
         context,
       }),
       singleton(S, {title: 'Photos', type: 'photoGallery', id: PHOTOS_ID}),
-      singleton(S, {title: 'Book', type: 'bookPage', id: BOOK_ID}),
+      singleton(S, {title: 'Shop', type: 'bookPage', id: BOOK_ID}),
       singleton(S, {title: 'Site settings', type: 'siteSettings', id: SETTINGS_ID}),
     ])
