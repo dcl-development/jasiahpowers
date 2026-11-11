@@ -1,23 +1,11 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
-import { launchAtMsFromWindow, useStoreLaunched } from '@/hooks/useStoreLaunched'
+import { useEffect, useRef, useState } from 'react'
+import { useStoreCountdown } from '@/hooks/useStoreCountdown'
+import { formatCountdownLine } from '@/lib/storeCountdown'
 
 const DEFAULT_COUNTDOWN_PREFIX = "Let's Figure It Out drops in"
-
-function pad2(value) {
-  return String(value).padStart(2, '0')
-}
-
-function formatCountdown(remainingMs) {
-  const totalSeconds = Math.max(0, Math.floor(remainingMs / 1000))
-  const days = Math.floor(totalSeconds / 86_400)
-  const hours = Math.floor((totalSeconds % 86_400) / 3600)
-  const minutes = Math.floor((totalSeconds % 3600) / 60)
-  const seconds = totalSeconds % 60
-  return `${days}d ${pad2(hours)}h ${pad2(minutes)}m ${pad2(seconds)}s`
-}
 
 export default function BookHomeAnnouncement({
   enabled = false,
@@ -28,34 +16,15 @@ export default function BookHomeAnnouncement({
   const measureRef = useRef(null)
   const [overflows, setOverflows] = useState(false)
   const [reducedMotion, setReducedMotion] = useState(false)
-  const [remainingMs, setRemainingMs] = useState(null)
-  const isClient = useSyncExternalStore(
-    () => () => {},
-    () => true,
-    () => false
-  )
-  const launched = useStoreLaunched()
+  const { isClient, launched, remainingMs } = useStoreCountdown()
   const prefix = (countdownPrefix || DEFAULT_COUNTDOWN_PREFIX).trim()
-
-  useEffect(() => {
-    if (!isClient || launched) return undefined
-
-    const tick = () => {
-      const launch = launchAtMsFromWindow()
-      setRemainingMs(Math.max(0, launch - Date.now()))
-    }
-
-    tick()
-    const id = window.setInterval(tick, 1000)
-    return () => window.clearInterval(id)
-  }, [isClient, launched])
 
   const postLaunchText = String(announcementText || '').trim()
   let line = ''
   if (launched) {
     line = postLaunchText
   } else if (remainingMs !== null) {
-    line = `${prefix} ${formatCountdown(remainingMs)}`.trim()
+    line = formatCountdownLine(prefix, remainingMs)
   }
 
   useEffect(() => {

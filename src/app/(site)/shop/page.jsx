@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import BookCheckout from '@/components/book/BookCheckout'
 import BookDescription from '@/components/book/BookDescription'
 import BookMedia from '@/components/book/BookMedia'
+import ShopLaunchCountdown from '@/components/book/ShopLaunchCountdown'
 import Reveal from '@/components/motion/Reveal'
 import { getBookInventoryState, quantityLimit } from '@/lib/bookInventory'
 import { bookPageQuery } from '@/lib/queries'
@@ -68,7 +69,7 @@ function availabilityNote(inventory) {
   return null
 }
 
-function ComingSoonShop({ page }) {
+function ComingSoonShop({ page, countdownPrefix }) {
   const coverPhotos = page.photos?.length
     ? [page.photos.find((item) => item?.image?.asset) || page.photos[0]]
     : []
@@ -89,6 +90,7 @@ function ComingSoonShop({ page }) {
               <p className="book-product__coming-soon" role="status">
                 Coming soon
               </p>
+              <ShopLaunchCountdown countdownPrefix={countdownPrefix} />
             </Reveal>
           </div>
         </div>
@@ -115,7 +117,12 @@ export default async function ShopPage(props) {
   }
 
   if (!storeOpen) {
-    return <ComingSoonShop page={page} />
+    return (
+      <ComingSoonShop
+        page={page}
+        countdownPrefix={page.homeCountdownText?.trim() || ''}
+      />
+    )
   }
 
   const inventory = await getBookInventoryState()
