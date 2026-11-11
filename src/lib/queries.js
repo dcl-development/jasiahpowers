@@ -18,6 +18,37 @@ export const homePageQuery = `*[_type == "homePage"][0]{
   }
 }`
 
+export const bookHomeAnnouncementQuery = `*[_type == "bookPage"][0]{
+  showHomeAnnouncement,
+  homeCountdownText,
+  homeAnnouncementText
+}`
+
+export const bookPageQuery = `*[_type == "bookPage"][0]{
+  title,
+  description,
+  photos[]{
+    image,
+    alt
+  },
+  priceLabel,
+  supportEmail,
+  shippingSummary,
+  refundSummary,
+  startingInventory,
+  pauseSales,
+  unitsSold,
+  seoDescription
+}`
+
+export const bookPageInventoryQuery = `*[_type == "bookPage"][0]{
+  _id,
+  startingInventory,
+  pauseSales,
+  unitsSold,
+  processedCheckoutSessionIds
+}`
+
 export const siteSettingsQuery = `*[_type == "siteSettings"][0]{
   title,
   contactEmail,

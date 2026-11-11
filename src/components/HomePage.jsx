@@ -1,12 +1,26 @@
+import BookHomeAnnouncement from '@/components/book/BookHomeAnnouncement'
 import HomeIntro from '@/components/HomeIntro'
 import FeaturedReel from '@/components/projects/FeaturedReel'
 import Reveal from '@/components/motion/Reveal'
 
-export default function HomePage({ title, videoId, welcomeMessage, projects }) {
+export default function HomePage({
+  title,
+  videoId,
+  welcomeMessage,
+  projects,
+  showAnnouncement = false,
+  announcementText = '',
+  countdownPrefix = '',
+}) {
   const message = welcomeMessage?.trim()
 
   return (
     <div className="home">
+      <BookHomeAnnouncement
+        enabled={showAnnouncement}
+        announcementText={announcementText}
+        countdownPrefix={countdownPrefix}
+      />
       <HomeIntro title={title} />
       <h1 className="visually-hidden">{title}</h1>
       {message ? (

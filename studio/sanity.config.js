@@ -4,7 +4,7 @@ import {schemaTypes} from './schemaTypes'
 import {structure} from './structure'
 import {StudioIcon} from './icon'
 
-const SINGLETONS = new Set(['homePage', 'photoGallery', 'siteSettings'])
+const SINGLETONS = new Set(['homePage', 'photoGallery', 'siteSettings', 'bookPage'])
 
 export default defineConfig({
   name: 'default',
