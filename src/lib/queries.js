@@ -26,6 +26,7 @@ export const bookHomeAnnouncementQuery = `*[_type == "bookPage"][0]{
 
 export const bookPageQuery = `*[_type == "bookPage"][0]{
   title,
+  homeCountdownText,
   description,
   photos[]{
     image,
