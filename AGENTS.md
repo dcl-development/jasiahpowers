@@ -15,7 +15,7 @@ The framework repo is private. Cloud agents open it with `git clone --depth 1 ht
 - Vercel (`vercel.json`: npm install, npm run build).
 
 ## Layout
-- `src/app/(site)/` pages: home, `photos/`, `prints/`, `projects/`, `video/`, `book/`, `contact/`. `src/app/(studio)/` embedded Studio. `src/app/api/booking/`, `src/app/api/book/`.
+- `src/app/(site)/` pages: home, `photos/`, `prints/`, `projects/`, `video/`, `shop/`, `contact/`. `src/app/(studio)/` embedded Studio. `src/app/api/booking/`, `src/app/api/shop/` (checkout + Stripe webhook).
 - `src/components/` (`projects/`, `photos/`), `src/lib/` Sanity client and queries.
 - `studio/` standalone Studio with its **own** package.json (Sanity 6). Schema: homePage, photo, project, siteSettings. `photoGallery` and `siteSettings` are singletons.
 - `scripts/migrate-handoff.mjs` one-off content migration. `scripts/seed-book-page.mjs` seeds the Book singleton. `DEPLOYMENT.md` has the full deploy notes.

@@ -23,7 +23,7 @@ export default function BookCheckout({
     setMessage('')
 
     try {
-      const res = await fetch('/api/book/checkout', {
+      const res = await fetch('/api/shop/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ quantity }),
