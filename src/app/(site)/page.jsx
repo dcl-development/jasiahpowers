@@ -7,10 +7,10 @@ import {
   siteSettingsQuery,
 } from '@/lib/queries'
 import { youtubeId } from '@/lib/site'
-import { isStoreOpen } from '@/lib/storeLaunch'
-import { cookies } from 'next/headers'
 
 export const revalidate = 60
+
+const DEFAULT_COUNTDOWN_PREFIX = "Let's Figure It Out drops in"
 
 export default async function Page() {
   const [home, allProjects, settings, book] = await Promise.all([
@@ -23,20 +23,17 @@ export default async function Page() {
   const picked = (home?.featuredProjects || []).filter((project) => project?._id)
   const projects = picked.length ? picked : allProjects || []
 
-  const cookieStore = await cookies()
-  const storeOpen = await isStoreOpen(cookieStore)
-  const announcementText = book?.showHomeAnnouncement
-    ? book?.homeAnnouncementText?.trim() || ''
-    : ''
-
   return (
     <HomePage
       title={settings?.title || 'Jasiah Powers'}
       videoId={youtubeId(home?.featuredVideo?.videoId)}
       welcomeMessage={home?.welcomeMessage || ''}
       projects={projects}
-      announcementText={announcementText}
-      storeOpen={storeOpen}
+      showAnnouncement={Boolean(book?.showHomeAnnouncement)}
+      announcementText={book?.homeAnnouncementText?.trim() || ''}
+      countdownPrefix={
+        book?.homeCountdownText?.trim() || DEFAULT_COUNTDOWN_PREFIX
+      }
     />
   )
 }

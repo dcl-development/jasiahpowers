@@ -8,14 +8,19 @@ export default function HomePage({
   videoId,
   welcomeMessage,
   projects,
+  showAnnouncement = false,
   announcementText = '',
-  storeOpen = false,
+  countdownPrefix = '',
 }) {
   const message = welcomeMessage?.trim()
 
   return (
     <div className="home">
-      <BookHomeAnnouncement text={announcementText} storeOpen={storeOpen} />
+      <BookHomeAnnouncement
+        enabled={showAnnouncement}
+        announcementText={announcementText}
+        countdownPrefix={countdownPrefix}
+      />
       <HomeIntro title={title} />
       <h1 className="visually-hidden">{title}</h1>
       {message ? (

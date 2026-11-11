@@ -20,6 +20,7 @@ export const homePageQuery = `*[_type == "homePage"][0]{
 
 export const bookHomeAnnouncementQuery = `*[_type == "bookPage"][0]{
   showHomeAnnouncement,
+  homeCountdownText,
   homeAnnouncementText
 }`
 
