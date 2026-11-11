@@ -1560,6 +1560,7 @@ code {
   font-size: 15px;
   font-weight: 500;
   letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
   pointer-events: none;
 }
 
@@ -1584,6 +1585,7 @@ code {
   font-size: 15px;
   font-weight: 500;
   letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
   line-height: 1.25;
   white-space: nowrap;
 }

@@ -6,17 +6,17 @@ import { launchAtMsFromWindow, useStoreLaunched } from '@/hooks/useStoreLaunched
 
 const DEFAULT_COUNTDOWN_PREFIX = "Let's Figure It Out drops in"
 
+function pad2(value) {
+  return String(value).padStart(2, '0')
+}
+
 function formatCountdown(remainingMs) {
-  if (remainingMs <= 0) return '0m'
-  const totalMinutes = Math.floor(remainingMs / 60_000)
-  const days = Math.floor(totalMinutes / (60 * 24))
-  const hours = Math.floor((totalMinutes % (60 * 24)) / 60)
-  const minutes = totalMinutes % 60
-  const parts = []
-  if (days > 0) parts.push(`${days}d`)
-  if (days > 0 || hours > 0) parts.push(`${hours}h`)
-  parts.push(`${minutes}m`)
-  return parts.join(' ')
+  const totalSeconds = Math.max(0, Math.floor(remainingMs / 1000))
+  const days = Math.floor(totalSeconds / 86_400)
+  const hours = Math.floor((totalSeconds % 86_400) / 3600)
+  const minutes = Math.floor((totalSeconds % 3600) / 60)
+  const seconds = totalSeconds % 60
+  return `${days}d ${pad2(hours)}h ${pad2(minutes)}m ${pad2(seconds)}s`
 }
 
 export default function BookHomeAnnouncement({
