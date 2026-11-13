@@ -14,6 +14,8 @@ export default defineConfig({
   // Hide Sanity's "What's new" product popups so the client never sees them.
   announcements: {enabled: false},
   releases: {enabled: false},
+  scheduledDrafts: {enabled: false},
+  tasks: {enabled: false},
 
   projectId: 'k4dm6cys',
   dataset: 'production',
