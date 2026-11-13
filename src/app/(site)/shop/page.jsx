@@ -92,6 +92,9 @@ function ComingSoonShop({ page }) {
               </p>
               <ShopLaunchCountdown />
             </Reveal>
+            <Reveal delay={2}>
+              <BookDescription value={page.description} />
+            </Reveal>
           </div>
         </div>
       </div>
