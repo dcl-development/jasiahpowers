@@ -38,16 +38,13 @@ export const bookPageQuery = `*[_type == "bookPage"][0]{
   refundSummary,
   startingInventory,
   pauseSales,
-  unitsSold,
   seoDescription
 }`
 
 export const bookPageInventoryQuery = `*[_type == "bookPage"][0]{
   _id,
   startingInventory,
-  pauseSales,
-  unitsSold,
-  processedCheckoutSessionIds
+  pauseSales
 }`
 
 export const siteSettingsQuery = `*[_type == "siteSettings"][0]{
