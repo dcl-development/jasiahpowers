@@ -1640,3 +1640,26 @@ code {
     font-size: 18px;
   }
 }
+
+.book-product__description-body.is-clamped {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  overflow: hidden;
+}
+
+.book-product__description-body > :first-child {
+  margin-top: 0;
+}
+
+.book-product__description-toggle {
+  margin-top: 8px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
