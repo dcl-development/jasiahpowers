@@ -52,7 +52,7 @@ export async function POST(request) {
 
   let inventory
   try {
-    inventory = await getBookInventoryState()
+    inventory = await getBookInventoryState({ strict: true })
   } catch {
     return Response.json({ error: 'Could not check inventory.' }, { status: 503 })
   }
