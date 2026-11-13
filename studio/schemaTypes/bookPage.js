@@ -13,11 +13,6 @@ export default defineType({
     {name: 'commerce', title: 'Sales'},
     {name: 'copy', title: 'Shipping and refunds'},
     {name: 'seo', title: 'SEO'},
-    {
-      name: 'inventory',
-      title: 'Inventory (automatic)',
-      description: 'Sold count and session ids update from paid orders. Do not edit by hand.',
-    },
   ],
   fields: [
     defineField({
@@ -140,7 +135,7 @@ export default defineType({
       title: 'Starting inventory',
       type: 'number',
       fieldset: 'commerce',
-      description: 'Total copies available for sale (test: 100).',
+      description: 'Total copies for sale. Copies sold are counted from paid Stripe orders (refunded orders are not counted).',
       initialValue: 100,
       validation: (Rule) =>
         Rule.required().min(0).integer().error('Set how many copies are for sale.'),
@@ -153,25 +148,6 @@ export default defineType({
       description:
         'Turn on to hide checkout even when copies remain. Sold out still applies when inventory hits zero.',
       initialValue: false,
-    }),
-    defineField({
-      name: 'unitsSold',
-      title: 'Copies sold (paid)',
-      type: 'number',
-      fieldset: 'inventory',
-      readOnly: true,
-      description:
-        'Read-only. Increases automatically when Stripe marks an order paid. You do not need to change this.',
-      initialValue: 0,
-    }),
-    defineField({
-      name: 'processedCheckoutSessionIds',
-      title: 'Processed checkout sessions',
-      type: 'array',
-      fieldset: 'inventory',
-      readOnly: true,
-      hidden: true,
-      of: [{type: 'string'}],
     }),
     defineField({
       name: 'seoDescription',

@@ -23,8 +23,6 @@ const base = {
     'If a copy arrives damaged, email within 7 days of delivery for a refund or replacement.',
   startingInventory: 100,
   pauseSales: false,
-  unitsSold: 0,
-  processedCheckoutSessionIds: [],
 }
 
 if (!token) {

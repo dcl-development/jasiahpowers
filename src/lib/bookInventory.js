@@ -7,7 +7,14 @@ import {
   LOW_STOCK_THRESHOLD,
 } from '@/lib/stripe'
 
-export const BOOK_PAGE_ID = 'book-page-singleton'
+/*
+ * Stripe is the source of truth for copies sold: we add up the quantity of every
+ * paid book checkout, skipping fully refunded ones. Sanity only holds the starting
+ * inventory and the pause switch. If a count can't be read, the sale goes through.
+ */
+
+const DISPLAY_CACHE_MS = 5000
+let displayCache = { at: 0, sold: null }
 
 function sessionQuantity(session) {
   const fromMeta = Number(session?.metadata?.quantity)
@@ -15,41 +22,52 @@ function sessionQuantity(session) {
   return 1
 }
 
-/* Paid checkouts from the last hour whose webhook has not been recorded in Sanity yet. */
-export async function paidUnrecordedCopies(stripe, processedIds = []) {
-  if (!stripe) return 0
-  const processed = new Set(processedIds)
-  const since = Math.floor(Date.now() / 1000) - 60 * 60
-  let pending = 0
+function isFullyRefunded(session) {
+  const charge = session?.payment_intent?.latest_charge
+  return Boolean(charge && typeof charge === 'object' && charge.refunded)
+}
+
+export async function paidCopiesFromStripe(stripe) {
+  let sold = 0
   let startingAfter
-  for (let page = 0; page < 5; page += 1) {
+  for (let page = 0; page < 30; page += 1) {
     const list = await stripe.checkout.sessions.list({
       status: 'complete',
-      created: { gte: since },
       limit: 100,
+      expand: ['data.payment_intent.latest_charge'],
       ...(startingAfter ? { starting_after: startingAfter } : {}),
     })
     for (const session of list.data) {
       if (
         session.metadata?.product === BOOK_CHECKOUT_METADATA &&
         session.payment_status === 'paid' &&
-        !processed.has(session.id)
+        !isFullyRefunded(session)
       ) {
-        pending += sessionQuantity(session)
+        sold += sessionQuantity(session)
       }
     }
     if (!list.has_more) break
     startingAfter = list.data[list.data.length - 1]?.id
   }
-  return pending
+  return sold
 }
 
-/*
- * Only paid copies count against stock: unitsSold in Sanity plus paid orders
- * whose webhook hasn't landed yet. Open (unpaid) checkouts hold nothing.
- * If anything can't be checked, fall back to what we know and let the sale through.
- * live: read Sanity without the CDN (used by checkout).
- */
+async function copiesSold({ live }) {
+  const stripe = getStripe()
+  if (!stripe) return null
+  if (!live && displayCache.sold !== null && Date.now() - displayCache.at < DISPLAY_CACHE_MS) {
+    return displayCache.sold
+  }
+  try {
+    const sold = await paidCopiesFromStripe(stripe)
+    displayCache = { at: Date.now(), sold }
+    return sold
+  } catch {
+    return null
+  }
+}
+
+/* live: skip caches (used by checkout). Page display may be up to a few seconds old. */
 export async function getBookInventoryState({ live = false } = {}) {
   let record = null
   try {
@@ -60,38 +78,16 @@ export async function getBookInventoryState({ live = false } = {}) {
     record = null
   }
 
+  const sold = await copiesSold({ live })
+  const known = Boolean(record) && sold !== null
+
   const starting = Number(record?.startingInventory ?? 0)
-  const sold = Number(record?.unitsSold ?? 0)
   const paused = Boolean(record?.pauseSales)
+  const remaining = known ? Math.max(0, starting - sold) : MAX_COPIES_PER_ORDER
+  const soldOut = paused || (known && remaining <= 0)
+  const showRemaining = known && !soldOut && remaining <= LOW_STOCK_THRESHOLD
 
-  let pendingPaid = 0
-  const stripe = getStripe()
-  if (live && stripe && record) {
-    try {
-      pendingPaid = await paidUnrecordedCopies(
-        stripe,
-        record.processedCheckoutSessionIds
-      )
-    } catch {
-      pendingPaid = 0
-    }
-  }
-
-  const remaining = Math.max(0, starting - sold - pendingPaid)
-  /* No record means we couldn't read Sanity: don't call it sold out. */
-  const soldOut = record ? remaining <= 0 || paused : false
-  const showRemaining = !soldOut && record && remaining <= LOW_STOCK_THRESHOLD
-
-  return {
-    starting,
-    sold,
-    pendingPaid,
-    remaining: record ? remaining : MAX_COPIES_PER_ORDER,
-    soldOut,
-    showRemaining: Boolean(showRemaining),
-    paused,
-    record,
-  }
+  return { starting, sold, remaining, soldOut, showRemaining, paused, record }
 }
 
 export function quantityLimit(remaining) {
