@@ -15,27 +15,6 @@ function sessionQuantity(session) {
   return 1
 }
 
-export async function reservedOpenCopies(stripe) {
-  if (!stripe) return 0
-  let reserved = 0
-  let startingAfter
-  for (let page = 0; page < 5; page += 1) {
-    const list = await stripe.checkout.sessions.list({
-      status: 'open',
-      limit: 100,
-      ...(startingAfter ? { starting_after: startingAfter } : {}),
-    })
-    for (const session of list.data) {
-      if (session.metadata?.product === BOOK_CHECKOUT_METADATA) {
-        reserved += sessionQuantity(session)
-      }
-    }
-    if (!list.has_more) break
-    startingAfter = list.data[list.data.length - 1]?.id
-  }
-  return reserved
-}
-
 /* Paid checkouts from the last hour whose webhook has not been recorded in Sanity yet. */
 export async function paidUnrecordedCopies(stripe, processedIds = []) {
   if (!stripe) return 0
@@ -66,61 +45,50 @@ export async function paidUnrecordedCopies(stripe, processedIds = []) {
 }
 
 /*
- * strict: used by checkout. Reads Sanity live (no CDN), counts paid-but-unrecorded
- * orders, and throws if anything cannot be checked so checkout refuses instead of guessing.
- * Non-strict: used for page display; tolerates errors.
+ * Only paid copies count against stock: unitsSold in Sanity plus paid orders
+ * whose webhook hasn't landed yet. Open (unpaid) checkouts hold nothing.
+ * If anything can't be checked, fall back to what we know and let the sale through.
+ * live: read Sanity without the CDN (used by checkout).
  */
-export async function getBookInventoryState({ strict = false } = {}) {
+export async function getBookInventoryState({ live = false } = {}) {
   let record = null
-  if (strict) {
-    record = await client
-      .withConfig({ useCdn: false })
-      .fetch(bookPageInventoryQuery)
-    if (!record) throw new Error('Book inventory record missing')
-  } else {
-    try {
-      record = await sanityFetch(bookPageInventoryQuery)
-    } catch {
-      record = null
-    }
+  try {
+    record = live
+      ? await client.withConfig({ useCdn: false }).fetch(bookPageInventoryQuery)
+      : await sanityFetch(bookPageInventoryQuery)
+  } catch {
+    record = null
   }
 
   const starting = Number(record?.startingInventory ?? 0)
   const sold = Number(record?.unitsSold ?? 0)
   const paused = Boolean(record?.pauseSales)
 
-  const stripe = getStripe()
-  let reserved = 0
   let pendingPaid = 0
-  if (stripe) {
-    if (strict) {
-      ;[reserved, pendingPaid] = await Promise.all([
-        reservedOpenCopies(stripe),
-        paidUnrecordedCopies(stripe, record?.processedCheckoutSessionIds),
-      ])
-    } else {
-      try {
-        reserved = await reservedOpenCopies(stripe)
-      } catch {
-        reserved = 0
-      }
+  const stripe = getStripe()
+  if (live && stripe && record) {
+    try {
+      pendingPaid = await paidUnrecordedCopies(
+        stripe,
+        record.processedCheckoutSessionIds
+      )
+    } catch {
+      pendingPaid = 0
     }
-  } else if (strict) {
-    throw new Error('Stripe not configured')
   }
 
-  const remaining = Math.max(0, starting - sold - reserved - pendingPaid)
-  const soldOut = remaining <= 0 || paused
-  const showRemaining = !soldOut && remaining <= LOW_STOCK_THRESHOLD
+  const remaining = Math.max(0, starting - sold - pendingPaid)
+  /* No record means we couldn't read Sanity: don't call it sold out. */
+  const soldOut = record ? remaining <= 0 || paused : false
+  const showRemaining = !soldOut && record && remaining <= LOW_STOCK_THRESHOLD
 
   return {
     starting,
     sold,
-    reserved,
     pendingPaid,
-    remaining,
+    remaining: record ? remaining : MAX_COPIES_PER_ORDER,
     soldOut,
-    showRemaining,
+    showRemaining: Boolean(showRemaining),
     paused,
     record,
   }

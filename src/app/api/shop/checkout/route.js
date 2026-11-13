@@ -50,12 +50,7 @@ export async function POST(request) {
     )
   }
 
-  let inventory
-  try {
-    inventory = await getBookInventoryState({ strict: true })
-  } catch {
-    return Response.json({ error: 'Could not check inventory.' }, { status: 503 })
-  }
+  const inventory = await getBookInventoryState({ live: true })
 
   if (inventory.soldOut) {
     return Response.json({ error: 'Sold out.' }, { status: 409 })
