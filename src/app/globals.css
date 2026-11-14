@@ -1556,7 +1556,7 @@ code {
   position: relative;
   overflow: hidden;
   width: 100%;
-  padding: 10px 0;
+  padding: 8px 0;
 }
 
 .book-announcement__measure {
@@ -1568,7 +1568,7 @@ code {
   overflow: hidden;
   white-space: nowrap;
   font-family: var(--font-body);
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 500;
   letter-spacing: -0.01em;
   font-variant-numeric: tabular-nums;
@@ -1593,7 +1593,7 @@ code {
   flex: 0 0 auto;
   padding-left: var(--gutter);
   font-family: var(--font-body);
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 500;
   letter-spacing: -0.01em;
   font-variant-numeric: tabular-nums;
@@ -1603,6 +1603,17 @@ code {
 
 .book-announcement__track--static .book-announcement__text {
   padding-right: var(--gutter);
+}
+
+@media (max-width: 600px) {
+  .book-announcement__viewport {
+    padding: 6px 0;
+  }
+
+  .book-announcement__measure,
+  .book-announcement__text {
+    font-size: 12px;
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
