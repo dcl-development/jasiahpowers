@@ -25,6 +25,8 @@
 }
 
 html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
   scrollbar-gutter: stable;
   --font-body: var(--font-grotesk), "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-display: var(--font-switzer), "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -1559,22 +1561,6 @@ code {
   padding: 8px 0;
 }
 
-.book-announcement__measure {
-  position: absolute;
-  left: 0;
-  top: 0;
-  visibility: hidden;
-  height: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  font-family: var(--font-body);
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  font-variant-numeric: tabular-nums;
-  pointer-events: none;
-}
-
 .book-announcement__track {
   display: flex;
   gap: 3rem;
@@ -1610,7 +1596,6 @@ code {
     padding: 6px 0;
   }
 
-  .book-announcement__measure,
   .book-announcement__text {
     font-size: 12px;
   }
