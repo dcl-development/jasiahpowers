@@ -10,7 +10,6 @@ export default function HomePage({
   projects,
   showAnnouncement = false,
   announcementText = '',
-  countdownPrefix = '',
 }) {
   const message = welcomeMessage?.trim()
 
@@ -19,7 +18,6 @@ export default function HomePage({
       <BookHomeAnnouncement
         enabled={showAnnouncement}
         announcementText={announcementText}
-        countdownPrefix={countdownPrefix}
       />
       <HomeIntro title={title} />
       <h1 className="visually-hidden">{title}</h1>

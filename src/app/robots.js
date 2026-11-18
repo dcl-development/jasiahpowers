@@ -6,5 +6,6 @@ export default function robots() {
       allow: '/',
       disallow: ['/studio/', '/admin/'],
     },
+    sitemap: 'https://www.jasiahpowers.com/sitemap.xml',
   }
 }

@@ -2,30 +2,16 @@
 
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
-import { useStoreCountdown } from '@/hooks/useStoreCountdown'
-import { formatCountdownLine } from '@/lib/storeCountdown'
-
-const DEFAULT_COUNTDOWN_PREFIX = "Let's Figure It Out drops in"
 
 export default function BookHomeAnnouncement({
   enabled = false,
   announcementText = '',
-  countdownPrefix = '',
 }) {
   const viewportRef = useRef(null)
   const textRef = useRef(null)
   const [overflows, setOverflows] = useState(false)
   const [reducedMotion, setReducedMotion] = useState(false)
-  const { isClient, launched, remainingMs } = useStoreCountdown()
-  const prefix = (countdownPrefix || DEFAULT_COUNTDOWN_PREFIX).trim()
-
-  const postLaunchText = String(announcementText || '').trim()
-  let line = ''
-  if (launched) {
-    line = postLaunchText
-  } else if (remainingMs !== null) {
-    line = formatCountdownLine(prefix, remainingMs)
-  }
+  const line = String(announcementText || '').trim()
 
   useEffect(() => {
     if (!line) return undefined
@@ -60,7 +46,7 @@ export default function BookHomeAnnouncement({
     }
   }, [line])
 
-  if (!enabled || !isClient || !line) return null
+  if (!enabled || !line) return null
 
   const marquee = overflows && !reducedMotion
 
@@ -72,11 +58,11 @@ export default function BookHomeAnnouncement({
             marquee ? ' book-announcement__track--scroll' : ' book-announcement__track--static'
           }`}
         >
-          <span className="book-announcement__text" ref={textRef} suppressHydrationWarning>
+          <span className="book-announcement__text" ref={textRef}>
             {line}
           </span>
           {marquee ? (
-            <span className="book-announcement__text" aria-hidden="true" suppressHydrationWarning>
+            <span className="book-announcement__text" aria-hidden="true">
               {line}
             </span>
           ) : null}
