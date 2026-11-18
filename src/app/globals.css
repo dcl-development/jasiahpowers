@@ -1322,32 +1322,6 @@ code {
   line-height: 1.35;
 }
 
-.book-product__coming-soon {
-  margin-top: 16px;
-  font-size: 17px;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  line-height: 1.35;
-}
-
-.book-product__launch-countdown {
-  margin-top: 14px;
-  font-family: var(--font-display);
-  font-size: clamp(28px, 4.5vw, 44px);
-  font-weight: 700;
-  letter-spacing: -0.04em;
-  line-height: 1.05;
-  font-variant-numeric: tabular-nums;
-}
-
-.book-product--soon {
-  align-items: start;
-}
-
-.book-page--soon .book-product--soon:has(.book-product__media) {
-  gap: clamp(24px, 4vw, 48px);
-}
-
 .book-product__description {
   margin-top: 18px;
   font-size: 17px;

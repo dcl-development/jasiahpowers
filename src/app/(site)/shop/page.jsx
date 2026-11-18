@@ -2,15 +2,12 @@ import { notFound } from 'next/navigation'
 import BookCheckout from '@/components/book/BookCheckout'
 import BookDescription from '@/components/book/BookDescription'
 import BookMedia from '@/components/book/BookMedia'
-import ShopLaunchCountdown from '@/components/book/ShopLaunchCountdown'
 import Reveal from '@/components/motion/Reveal'
 import { getBookInventoryState, quantityLimit } from '@/lib/bookInventory'
 import { bookPageQuery } from '@/lib/queries'
-import { sanityFetch } from '@/lib/sanity'
+import { sanityFetch, urlFor } from '@/lib/sanity'
 import { bookStripeConfigured } from '@/lib/stripe'
 import { contactHref } from '@/lib/site'
-import { isStoreOpen } from '@/lib/storeLaunch'
-import { cookies } from 'next/headers'
 
 export const dynamic = 'force-dynamic'
 
@@ -21,15 +18,27 @@ export async function generateMetadata() {
   } catch {
     page = null
   }
-  if (!page?.title) return { title: 'Shop', alternates: { canonical: '/shop' } }
-  const description = page.seoDescription?.trim() || undefined
+  if (!page?.title) return {}
+  const description = page.seoDescription?.trim()
+  const cover = (page.photos || []).find((item) => item?.image?.asset)
+  const image = cover
+    ? urlFor(cover.image).width(1200).height(630).fit('crop').url()
+    : null
   return {
     title: page.title,
-    description,
+    ...(description ? { description } : {}),
     alternates: { canonical: '/shop' },
     openGraph: {
+      title: page.title,
       url: '/shop',
       ...(description ? { description } : {}),
+      ...(image ? { images: [{ url: image, width: 1200, height: 630 }] } : {}),
+    },
+    twitter: {
+      card: image ? 'summary_large_image' : 'summary',
+      title: page.title,
+      ...(description ? { description } : {}),
+      ...(image ? { images: [image] } : {}),
     },
   }
 }
@@ -69,44 +78,9 @@ function availabilityNote(inventory) {
   return null
 }
 
-function ComingSoonShop({ page }) {
-  const coverPhotos = page.photos?.length
-    ? [page.photos.find((item) => item?.image?.asset) || page.photos[0]]
-    : []
-
-  return (
-    <article className="book-page book-page--soon">
-      <div className="book-product book-product--soon">
-        {coverPhotos.length ? (
-          <Reveal className="book-product__media" delay={1}>
-            <BookMedia photos={coverPhotos} />
-          </Reveal>
-        ) : null}
-        <div className="book-product__info">
-          <div className="book-product__stack">
-            <Reveal delay={1}>
-              <p className="kicker book-product__kicker">Book</p>
-              <h1 className="book-product__title">{page.title}</h1>
-              <p className="book-product__coming-soon" role="status">
-                Coming soon
-              </p>
-              <ShopLaunchCountdown />
-            </Reveal>
-            <Reveal delay={2}>
-              <BookDescription value={page.description} />
-            </Reveal>
-          </div>
-        </div>
-      </div>
-    </article>
-  )
-}
-
 export default async function ShopPage(props) {
   const searchParams = await props.searchParams
   const ordered = searchParams?.ordered === '1'
-  const cookieStore = await cookies()
-  const storeOpen = await isStoreOpen(cookieStore)
 
   let page = null
   try {
@@ -117,12 +91,6 @@ export default async function ShopPage(props) {
 
   if (!page?.title?.trim()) {
     notFound()
-  }
-
-  if (!storeOpen) {
-    return (
-      <ComingSoonShop page={page} />
-    )
   }
 
   const inventory = await getBookInventoryState()

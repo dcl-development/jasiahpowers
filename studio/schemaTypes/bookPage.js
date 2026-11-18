@@ -29,19 +29,8 @@ export default defineType({
       type: 'boolean',
       fieldset: 'announcement',
       description:
-        'Shows a black announcement bar on the homepage that links to the Shop page (/shop). Off by default. Before the store opens it shows the countdown text plus a live timer; after launch it shows Homepage announcement text.',
+        'Shows a black announcement bar on the homepage that links to the Shop page (/shop). Off by default. It shows the Homepage announcement text.',
       initialValue: false,
-    }),
-    defineField({
-      name: 'homeCountdownText',
-      title: 'Countdown text',
-      type: 'string',
-      fieldset: 'announcement',
-      initialValue: "Let's Figure It Out drops in",
-      description:
-        'Prefix in the homepage bar before the store opens, followed by the live countdown (for example 2d 11h 14m).',
-      validation: (Rule) =>
-        Rule.max(120).warning('Keep this short so it fits in the bar.'),
     }),
     defineField({
       name: 'homeAnnouncementText',
