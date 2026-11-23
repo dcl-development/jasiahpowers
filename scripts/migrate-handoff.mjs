@@ -1,5 +1,5 @@
 /**
- * One-time handoff migration for dataset production (project k4dm6cys).
+ * One-time handoff migration for the configured Sanity project and dataset.
  *
  * - Seeds orderRank from the old Display Order number.
  * - Turns any plain-text project descriptions into Portable Text blocks.
@@ -8,15 +8,17 @@
  *   SANITY_API_WRITE_TOKEN=your-token node scripts/migrate-handoff.mjs
  *
  * The token needs Editor access. Create one at
- * https://www.sanity.io/manage/project/k4dm6cys/api
+ * https://www.sanity.io/manage
  */
 
 import { createClient } from '@sanity/client'
 import { LexoRank } from 'lexorank'
 import { randomBytes } from 'node:crypto'
 
-const projectId = 'k4dm6cys'
-const dataset = 'production'
+const projectId =
+  process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || process.env.SANITY_STUDIO_PROJECT_ID
+const dataset =
+  process.env.NEXT_PUBLIC_SANITY_DATASET || process.env.SANITY_STUDIO_DATASET
 const token = process.env.SANITY_API_WRITE_TOKEN || process.env.SANITY_AUTH_TOKEN
 
 const GENERIC = new Set([
@@ -71,6 +73,13 @@ function bare(url) {
   return String(url || '').trim().replace(/\/+$/, '')
 }
 
+if (!projectId || !dataset) {
+  console.error(
+    'Missing NEXT_PUBLIC_SANITY_PROJECT_ID / NEXT_PUBLIC_SANITY_DATASET (or SANITY_STUDIO_*).'
+  )
+  process.exit(1)
+}
+
 if (!token) {
   console.error(
     'No write token. Run: SANITY_API_WRITE_TOKEN=… node scripts/migrate-handoff.mjs'
@@ -81,7 +90,7 @@ if (!token) {
 const client = createClient({
   projectId,
   dataset,
-  apiVersion: '2023-05-03',
+  apiVersion: '2026-10-28',
   token,
   useCdn: false,
 })

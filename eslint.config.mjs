@@ -3,7 +3,7 @@ import nextCoreWebVitals from 'eslint-config-next/core-web-vitals'
 
 export default defineConfig([
   {
-    ignores: ['studio/**', '.next/**', 'node_modules/**'],
+    ignores: ['studio/**', '.next/**', 'node_modules/**', 'schema.json', 'sanity.types.ts'],
   },
   {
     extends: [...nextCoreWebVitals],
