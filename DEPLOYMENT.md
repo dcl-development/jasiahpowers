@@ -45,7 +45,9 @@ Environment variables:
 - `BOOKING_TO_EMAIL` — optional. Defaults to the client's booking email (see the client row in Notion).
 - `BOOKING_FROM_EMAIL` — optional. Defaults to `onboarding@resend.dev` when unset. Production uses the verified sender.
 - `YOUTUBE_API_KEY` — server-only. Required for `/video`.
-- Optional: `YOUTUBE_PLAYLIST_ID`, `NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET`
+- `NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET` — required (public identifiers; no app fallbacks).
+- `SANITY_STUDIO_PROJECT_ID`, `SANITY_STUDIO_DATASET` — same values; used by the Studio CLI and standalone Studio.
+- Optional: `YOUTUBE_PLAYLIST_ID`
 
 Homepage featured work is the ordered `featuredProjects` list on the Homepage document in Studio. If that list is empty, the home page shows every project.
 

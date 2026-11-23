@@ -6,6 +6,18 @@ import {StudioIcon} from './icon'
 
 const SINGLETONS = new Set(['homePage', 'photoGallery', 'siteSettings', 'bookPage'])
 
+const projectId =
+  process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || process.env.SANITY_STUDIO_PROJECT_ID
+const dataset =
+  process.env.NEXT_PUBLIC_SANITY_DATASET || process.env.SANITY_STUDIO_DATASET
+
+if (!projectId) {
+  throw new Error('Missing NEXT_PUBLIC_SANITY_PROJECT_ID or SANITY_STUDIO_PROJECT_ID')
+}
+if (!dataset) {
+  throw new Error('Missing NEXT_PUBLIC_SANITY_DATASET or SANITY_STUDIO_DATASET')
+}
+
 export default defineConfig({
   name: 'default',
   title: 'Jasiah Powers',
@@ -17,8 +29,8 @@ export default defineConfig({
   scheduledDrafts: {enabled: false},
   tasks: {enabled: false},
 
-  projectId: 'k4dm6cys',
-  dataset: 'production',
+  projectId,
+  dataset,
 
   plugins: [structureTool({structure})],
 

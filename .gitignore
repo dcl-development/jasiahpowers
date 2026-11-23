@@ -57,3 +57,6 @@ jasiahpowers.server/
 *.temp
 # macOS
 .DS_Store
+
+# TypeScript
+*.tsbuildinfo

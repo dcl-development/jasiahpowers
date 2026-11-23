@@ -6,8 +6,10 @@
 
 import { createClient } from '@sanity/client'
 
-const projectId = 'k4dm6cys'
-const dataset = 'production'
+const projectId =
+  process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || process.env.SANITY_STUDIO_PROJECT_ID
+const dataset =
+  process.env.NEXT_PUBLIC_SANITY_DATASET || process.env.SANITY_STUDIO_DATASET
 const token = process.env.SANITY_API_WRITE_TOKEN || process.env.SANITY_AUTH_TOKEN
 const docId = 'book-page-singleton'
 
@@ -25,6 +27,13 @@ const base = {
   pauseSales: false,
 }
 
+if (!projectId || !dataset) {
+  console.error(
+    'Missing NEXT_PUBLIC_SANITY_PROJECT_ID / NEXT_PUBLIC_SANITY_DATASET (or SANITY_STUDIO_*).'
+  )
+  process.exit(1)
+}
+
 if (!token) {
   console.error('No write token. Set SANITY_API_WRITE_TOKEN and run again.')
   process.exit(1)
@@ -33,7 +42,7 @@ if (!token) {
 const client = createClient({
   projectId,
   dataset,
-  apiVersion: '2023-05-03',
+  apiVersion: '2026-10-28',
   token,
   useCdn: false,
 })
